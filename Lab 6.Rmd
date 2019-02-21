@@ -6,5 +6,58 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+#Individual Part
+## Kelsey McKenna
+Question: Which airports had the highest probability of a delayed flight coming into Colorado and what was the degree of this probability?
+```{r}
+library(tidyverse)
+library(DALEX2)
+COflights <- read_csv("https://files.osf.io/v1/resources/3z5as4pej8/providers/osfstorage/5a8ca28f57103100104584db")
 
+delayplaces <- COflights %>% group_by(ORIGIN) %>%
+ filter(ARR_DELAY >15)) %>% summarise(Count = n()) 
+delayplaces
+totalplaces <- COflights %>% group_by(ORIGIN) %>% count()
+delayplaces <- delayplaces %>%
+  left_join(totalplaces, by = 'ORIGIN')
+delayplaces <- delayplaces %>%
+  mutate(Total = Count/n) %>% select(ORIGIN, Count, Total) %>% 
+  arrange(desc(Total)) 
+ggplot(data = delayplaces, aes(x=Total)) +
+  geom_histogram(bins=15)+
+  ggtitle('Histogram of Places by Delay')
+
+```
+As we can see from the histogram, there is one location that had the most flights by a lot at a .45 percent chance of having a flight delay. This location was in twin fall Idaho. There were clearly a couple more places with very high probabilities of having delayed flights. Amarillo, Texas was next followed by Charleston in South Carolina, and Albany, New York. Shockingly there is no regional correlation between these places and we cannot for example conclude that most delays occur in a certain region of the US. We can't even conclude that all these places are far from Denver, since Idaho is relatively close. Also, we should note that the average probability of having a delay into Denver is around .15 and the four highest airports appear to be somewhat of outliers having probabilities around and above .3.
+
+
+#Team Work
+Quesiton: Do places with a longer security wait also have more delayed flights? 
+Importance: This is important, because it is necessary to see whether security waits are related to delayed flights, if there were a correlation this would indicate that some airports were less efficient than other overall. 
+```{r}
+securitywait <- COflights %>% group_by(ORIGIN) %>% 
+  select(ORIGIN, SECURITY_DELAY) %>% filter(SECURITY_DELAY >15) %>%
+  summarise(secure = n())
+delaywait <- COflights %>% group_by(ORIGIN) %>% 
+  select(ORIGIN, LATE_AIRCRAFT_DELAY)  %>% filter(LATE_AIRCRAFT_DELAY>15) %>%
+  summarise(late = n())
+delaysecure <- merge(securitywait, delaywait, by="ORIGIN")
+
+
+delaysecure <- delaysecure %>% filter(ORIGIN != "DEN")
+securitywait
+delaywait
+
+ggplot(data=delaysecure)+
+  geom_jitter(aes(x = secure, y = late))+
+  geom_smooth(aes(x = secure, y = late))
+  xlab("Security Delays")+
+  ylab("Flight Delays")
+
+ggplot(A,aes(x,y)) +geom_point() +geom_point(data=B,colour='red')
+```
+Findings: As you can see from the plot, (we removed DEN because it was skewing the data and clearly an outlier) there is a positive relationship with Security Delays and Flight delays. In other words, airports that have more security delays are more likely to have flight delays. Therefore, these variables are related. 
+
+##Team Summary
+I, Kelsey McKenna, used probabilities to find my individual plot and come to a conclusion on which airports have the most delays. I didn't find a regional correlation between them. I also did the team plot relating security delays to flight delays and found a positive correlation between the two based on the plot. 
 
