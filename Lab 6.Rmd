@@ -47,6 +47,8 @@ The above graph shows the probability of delays happening in each month and the 
 ## Matthew Copeland
 #Question: Which airline carrier has the most delayes at Denver?
 ```{r}
+delayed <- COflights %>% group_by(CARRIER) %>% filter(ARR_DELAY >= 15) %>% summarize(count = n())
+Totalflights <- COflights %>% group_by(CARRIER) %>% filter(!is.na(ARR_TIME)) %>% summarize(count = n())
 Pof <- delayed %>% select(count) / Totalflights %>% select(count)
 Pof
 carriers <- COflights %>% select(CARRIER, ARR_DELAY) %>% arrange(desc(ARR_DELAY))
