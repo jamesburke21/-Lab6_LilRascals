@@ -109,11 +109,10 @@ delaywait
 
 ggplot(data=delaysecure)+
   geom_jitter(aes(x = secure, y = late))+
-  geom_smooth(aes(x = secure, y = late))
+  geom_smooth(aes(x = secure, y = late))+
   xlab("Security Delays")+
   ylab("Flight Delays")
 
-ggplot(A,aes(x,y)) +geom_point() +geom_point(data=B,colour='red')
 ```
 Findings: As you can see from the plot, (we removed DEN because it was skewing the data and clearly an outlier) there is a positive relationship with Security Delays and Flight delays. In other words, airports that have more security delays are more likely to have flight delays. Therefore, these variables are related. 
 
