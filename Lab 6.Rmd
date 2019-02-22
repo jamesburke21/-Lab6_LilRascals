@@ -57,7 +57,7 @@ ggplot(data = carriers)+
 As the graph shows american airlines has the longets delays of planes landing in colorado. 
 
 ##Shreeya Basrur Individual
-Question: How do weather delays contribute to overall delays? Over the course of a year, how does Colorado's variety of weather patterns due to having four distinct seasons impact the number of weather delays?
+#Question: How do weather delays contribute to overall delays? Over the course of a year, how does Colorado's variety of weather patterns due to having four distinct seasons impact the number of weather delays?
 ```{r}
 delayedflights <- COflights %>% filter(ARR_DELAY>15) %>% filter(YEAR == "2017")%>% summarise(count = n())
 delayedflights
@@ -117,4 +117,5 @@ I, Kelsey McKenna, used probabilities to find my individual plot and come to a c
 
 I, Shreeya Basrur, created a bar graph to analyse the distribution of weather delays over a single year by month. This was done using the geom_col function, with the NA values taken out and the graph modified to not be stacked. The plot was filled in yellow for contrast against the gray background. In addition, a plot title and axis titles were added for clarity.
 
+I, Matthew Copeland, Created a bar graph to ultametely expose which airline carrier was the slowest in the air by looking at the delaytimes and adding them all up based off their corresponding carrier. I wanted to show that the airline you travel can be a big factor in  the delays. 
 >>>>>>> master
