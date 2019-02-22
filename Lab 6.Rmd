@@ -33,12 +33,15 @@ As we can see from the histogram, there is one location that had the most flight
 
 #Shreeya Basrur Individual
 ```{r}
-delayedflights <- coflights %>% group_by(DEST = "DEN") %>% filter(ARR_DELAY>15) %>% filter(YEAR = "2017")%>% summarise(count = n())
+library(tidyverse)
+library(DALEX2)
+COflights <- read_csv("https://files.osf.io/v1/resources/3z5as4pej8/providers/osfstorage/5a8ca28f57103100104584db")
+delayedflights <- COflights %>% group_by(DEST = "DEN") %>% filter(ARR_DELAY>15) %>% filter(YEAR == "2017")%>% summarise(count = n())
 delayedflights
 
-year<-coflights %>% group_by(DEST = "DEN") %>% filter(YEAR = "2017")%>% summarise(count = n())
+year<-COflights %>% group_by(DEST = "DEN") %>% filter(YEAR == "2017")%>% summarise(count = n())
 
-weatherdelay <- coflights %>% group_by(DEST = "DEN") %>% filter(ARR_DELAY>15) %>% filter(YEAR = "2017") %>%  filter(WEATHER_DELAY) %>%  summarise(count = n())
+weatherdelay <- COflights %>% group_by(DEST = "DEN") %>% filter(ARR_DELAY>15) %>% filter(YEAR == "2017") %>%  filter(WEATHER_DELAY) %>%  summarise(count = n())
 weatherdelay
 
 prob_weather <- weatherdelay/delayedflights
