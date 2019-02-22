@@ -37,11 +37,13 @@ As we can see from the histogram, there is one location that had the most flight
 mtdelay <- COflights %>% filter(!is.na(ARR_TIME)) %>% mutate(truDelay =  ARR_DELAY >= 15 )
 delay <- COflights %>% filter(!is.na(ARR_TIME)) %>% filter(ARR_DELAY >= 15) 
 total <- COflights %>% filter(!is.na(ARR_TIME))
-late <- COflights %>% filter(!is.na(ARR_TIME)) %>% select(MONTH, delay) %>% arrange(desc(ARR_DELAY))
-ggplot(data = late, aes(x = MONTH, y = )) +
-  geom_point() +
+late <- COflights %>% filter(!is.na(ARR_TIME)) %>% select(MONTH, ARR_DELAY) %>% arrange(desc(ARR_DELAY))
+ggplot(data = late, aes(x = MONTH)) +
+  geom_histogram(bins = 30) +
   ggtitle('Delays Per Month')
 ```
+The above graph shows the probability of delays happening in each month and the highest probability is in the center during the summer and the time when most people travel. This graph helps show that due to peak times of the year when people travel the likelyhood of a delay is higher than other months. 
+
 ## Matthew Copeland
 #Question: Which airline carrier has the most delayes at Denver?
 ```{r}
