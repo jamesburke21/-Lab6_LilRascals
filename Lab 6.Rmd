@@ -45,8 +45,9 @@ ggplot(data = late, aes(x = MONTH, y = )) +
 ## Matthew Copeland
 #Question: Which airline carrier has the most delayes at Denver?
 ```{r}
+Pof <- delayed %>% select(count) / Totalflights %>% select(count)
+Pof
 carriers <- COflights %>% select(CARRIER, ARR_DELAY) %>% arrange(desc(ARR_DELAY))
-carriers
 ggplot(data = carriers)+
   geom_col(aes(x = CARRIER, y = ARR_DELAY, fill = CARRIER),position = "dodge", na.rm = TRUE)+
   ggtitle('Arrival Delay v.s Carriers')+
@@ -54,7 +55,7 @@ ggplot(data = carriers)+
   xlab('Carrier')+
   labs(fill = 'Carrier')
 ```
-As the graph shows american airlines has the longets delays of planes landing in colorado. 
+The above set of numbers is the probability of having a delay based off the airline you take. The numbers are in the same order as the graph. And as the graph shows american airlines has the longets delays of planes landing in colorado. Even though American airlines don't have the highest probability of having a delay they essentially have longer delayes than all the competitors. 
 
 ##Shreeya Basrur Individual
 #Question: How do weather delays contribute to overall delays? Over the course of a year, how does Colorado's variety of weather patterns due to having four distinct seasons impact the number of weather delays?
