@@ -7,14 +7,15 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-#Individual Part
-## Kelsey McKenna
-Question: Which airports had the highest probability of a delayed flight coming into Colorado and what was the degree of this probability?
 ```{r}
 library(tidyverse)
 library(DALEX2)
 COflights <- read_csv("https://files.osf.io/v1/resources/3z5as4pej8/providers/osfstorage/5a8ca28f57103100104584db")
-
+```
+###Individual Part
+## Kelsey McKenna
+#Question: Which airports had the highest probability of a delayed flight coming into Colorado and what was the degree of this probability?
+```{r}
 delayplaces <- COflights %>% group_by(ORIGIN) %>%
  filter(ARR_DELAY >15) %>% summarise(Count = n()) 
 delayplaces
@@ -27,16 +28,12 @@ delayplaces <- delayplaces %>%
 ggplot(data = delayplaces, aes(x=Total)) +
   geom_histogram(bins=15)+
   ggtitle('Histogram of Places by Delay')
-
 ```
 As we can see from the histogram, there is one location that had the most flights by a lot at a .45 percent chance of having a flight delay. This location was in twin fall Idaho. There were clearly a couple more places with very high probabilities of having delayed flights. Amarillo, Texas was next followed by Charleston in South Carolina, and Albany, New York. Shockingly there is no regional correlation between these places and we cannot for example conclude that most delays occur in a certain region of the US. We can't even conclude that all these places are far from Denver, since Idaho is relatively close. Also, we should note that the average probability of having a delay into Denver is around .15 and the four highest airports appear to be somewhat of outliers having probabilities around and above .3.
 
 ## James Burke
-Question: Which months in the year had the highest probability of a delayed flight coming into Colorado and what was the degree of this probability?
+#Question: Which months in the year had the highest probability of a delayed flight coming into Colorado and what was the degree of this probability?
 ```{r}
-library(tidyverse)
-library(DALEX2)
-COflights <- read_csv("https://files.osf.io/v1/resources/3z5as4pej8/providers/osfstorage/5a8ca28f57103100104584db")
 mtdelay <- COflights %>% filter(!is.na(ARR_TIME)) %>% mutate(truDelay =  ARR_DELAY >= 15 )
 delay <- COflights %>% filter(!is.na(ARR_TIME)) %>% filter(ARR_DELAY >= 15) 
 total <- COflights %>% filter(!is.na(ARR_TIME))
@@ -44,12 +41,24 @@ late <- COflights %>% filter(!is.na(ARR_TIME)) %>% select(MONTH, delay) %>% arra
 ggplot(data = late, aes(x = MONTH, y = )) +
   geom_point() +
   ggtitle('Delays Per Month')
-
 ```
-## Shreeya Basrur
-Question: How do weather delays contribute to overall delays? Over the course of a year, how does Colorado's variety of weather patterns due to having four distinct seasons impact the number of weather delays?
+## Matthew Copeland
+#Question: Which airline carrier has the most delayes at Denver?
 ```{r}
-delayedflights <- COflights %>% filter(ARR_DELAY>15) %>% filter(YEAR == "2017")%>% summarise(count = n())
+carriers <- COflights %>% select(CARRIER, ARR_DELAY) %>% arrange(desc(ARR_DELAY))
+carriers
+ggplot(data = carriers)+
+  geom_col(aes(x = CARRIER, y = ARR_DELAY, fill = CARRIER),position = "dodge", na.rm = TRUE)+
+  ggtitle('Arrival Delay v.s Carriers')+
+  ylab('Total Arrival Delaye Minutes')+
+  xlab('Carrier')+
+  labs(fill = 'Carrier')
+```
+As the graph shows american airlines has the longets delays of planes landing in colorado. 
+
+##Shreeya Basrur Individual
+```{r}
+delayedflights <- COflights %>% group_by(DEST = "DEN") %>% filter(ARR_DELAY>15) %>% filter(YEAR == "2017")%>% summarise(count = n())
 delayedflights
 
 year<-COflights %>% group_by(DEST == "DEN") %>% filter(YEAR == "2017")%>% summarise(count = n())
@@ -75,10 +84,9 @@ Conclusion: Although weather delays don't contribute that much to the enormity o
 
 I, Shreeya Basrur, created a bar graph to analyse the distribution of weather delays over a single year by month. This was done using the geom_col function, with the NA values taken out and the graph modified to not be stacked. The plot was filled in yellow for contrast against the gray background. In addition, a plot title and axis titles were added for clarity.
 
-
-#Team Work
-Quesiton: Do places with a longer security wait also have more delayed flights? 
-Importance: This is important, because it is necessary to see whether security waits are related to delayed flights, if there were a correlation this would indicate that some airports were less efficient than other overall. 
+##Team Work
+#Quesiton: Do places with a longer security wait also have more delayed flights? 
+#Importance: This is important, because it is necessary to see whether security waits are related to delayed flights, if there were a correlation this would indicate that some airports were less efficient than other overall. 
 ```{r}
 securitywait <- COflights %>% group_by(ORIGIN) %>% 
   select(ORIGIN, SECURITY_DELAY) %>% filter(SECURITY_DELAY >15) %>%
