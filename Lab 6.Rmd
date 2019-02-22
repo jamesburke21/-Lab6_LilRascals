@@ -46,26 +46,34 @@ ggplot(data = late, aes(x = MONTH, y = )) +
   ggtitle('Delays Per Month')
 
 ```
-#Shreeya Basrur Individual
+## Shreeya Basrur
+Question: How do weather delays contribute to overall delays? Over the course of a year, how does Colorado's variety of weather patterns due to having four distinct seasons impact the number of weather delays?
 ```{r}
-library(tidyverse)
-library(DALEX2)
-COflights <- read_csv("https://files.osf.io/v1/resources/3z5as4pej8/providers/osfstorage/5a8ca28f57103100104584db")
-delayedflights <- COflights %>% group_by(DEST = "DEN") %>% filter(ARR_DELAY>15) %>% filter(YEAR == "2017")%>% summarise(count = n())
+delayedflights <- COflights %>% filter(ARR_DELAY>15) %>% filter(YEAR == "2017")%>% summarise(count = n())
 delayedflights
 
-year<-COflights %>% group_by(DEST = "DEN") %>% filter(YEAR == "2017")%>% summarise(count = n())
+year<-COflights %>% group_by(DEST == "DEN") %>% filter(YEAR == "2017")%>% summarise(count = n())
 
-weatherdelay <- COflights %>% group_by(DEST = "DEN") %>% filter(ARR_DELAY>15) %>% filter(YEAR == "2017") %>%  filter(WEATHER_DELAY) %>%  summarise(count = n())
+weatherdelay <-COflights %>% select(WEATHER_DELAY, DAY_OF_MONTH) %>% summarise(count = n())
 weatherdelay
+prob <-79030/476809
+prob
 
-prob_weather <- weatherdelay/delayedflights
+weather <- COflights %>% filter(WEATHER_DELAY>15) %>% summarise(count = n())
+weather
 
-ggplot(data = COflights, aes(x = weatherdelay)) +
-  geom_density() + 
-  ggtitle('Distribution of weather delays in 2017')
+
+ggplot(data = COflights)+
+  geom_col(mapping = aes(x = MONTH, y = WEATHER_DELAY),position = "dodge", na.rm = TRUE, fill = "yellow") +
+  ggtitle("Average weather delay over 2017 by month")+
+    xlab("Months") +
+    ylab("Weather Delay")
 ```
+Findings: The probablility of a weather delay given all delays was .165. That means that weather delays played a small role in all the delays that DIA experiences. This probability was derived by finding the total count of planes delayed by 15 minutes and finding the percentage of those planes that were delayed by weather. Plotting that data, January has the most delays while September and November had the fewest delays.
 
+Conclusion: Although weather delays don't contribute that much to the enormity of the problem of delayed flights, the weather of January, March, and August seemed to cause more delayed flights while the opposite effect took place in September and November.
+
+I, Shreeya Basrur, created a bar graph to analyse the distribution of weather delays over a single year by month. This was done using the geom_col function, with the NA values taken out and the graph modified to not be stacked. The plot was filled in yellow for contrast against the gray background. In addition, a plot title and axis titles were added for clarity.
 
 
 #Team Work
